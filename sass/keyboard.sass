@@ -1,0 +1,57 @@
+.keyboard
+  position: fixed
+  left: 0
+  top: 200
+  width: 100%
+  padding: 5px 0
+  background: #003b5d
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.5)
+  user-select: none
+  transition: bottom 0.4s
+  &__keys
+    text-align: center
+  &__key
+    position: relative
+    height: 45px
+    width: 6%
+    max-width: 90px
+    margin: 3px
+    border-radius: 4px
+    border: none
+    background: rgba(255, 255, 255, 0.2)
+    color: #ffffff
+    font-size: 1.05rem
+    outline: none
+    cursor: pointer
+    display: inline-flex
+    justify-content: center
+    vertical-align: top
+    padding: 0
+    -webkit-tap-highlight-color: transparent
+    &:active
+      background: rgba(255, 255, 255, 0.12)
+    &--large
+      width: 12%
+    &--exra-large
+      width: 36%
+      max-width: 500px
+    &--pressed::after
+      content: ''
+      position: absolute
+      top: 10px
+      right: 10px
+      height: 8px
+      width: 8px
+      border-radius: 50%
+      background: rgba(0, 0, 0, 0.4)
+    &--active::after
+      background: #14e70c
+
+
+
+
+.keyboard--hidden
+  bottom: -100%
+
+
+
