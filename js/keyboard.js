@@ -130,7 +130,7 @@ const Keyboard = {
                     this._triggerEvent("oninput");
                 });
                 break;
-      };
+      }
 
       fragment.appendChild(keyElement);
       if (insertLineBreak) {
