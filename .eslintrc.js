@@ -3,12 +3,16 @@ module.exports = {
         "browser": true,
         "es2021": true
     },
-    "extends": "eslint:recommended",
+    "extends": [
+        'standard',
+        'eslint:recommended',
+      ],
     "overrides": [
     ],
     "parserOptions": {
-        "ecmaVersion": "latest"
+        "ecmaVersion": 6
     },
+    "parser": "babel-eslint",
     ignorePatterns: ['.eslintrc.js'],
     "rules": {
     }
