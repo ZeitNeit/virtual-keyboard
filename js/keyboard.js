@@ -1,5 +1,6 @@
 const Keyboard = {
   elements: {
+    workArea: null,
     main: null,
     keysContainer: null,
     keys: []
@@ -19,13 +20,25 @@ const Keyboard = {
     // CREATE
     this.elements.main = document.createElement("div");
     this.elements.keysContainer = document.createElement("div");
+    this.elements.workArea = document.createElement("textarea");
     // SETUP
-    this.elements.main.classList.add("keyboard", "1keyboard--hidden");
+    this.elements.main.classList.add("keyboard", "keyboard--hidden");
     this.elements.keysContainer.classList.add("keyboard__keys");
     this.elements.keysContainer.appendChild(this._createKeys());
+    this.elements.keys = this.elements.keysContainer.querySelectorAll(".keyboard__keys");
+    this.elements.workArea.classList.add("work-area")
     // ADD TO DOM
     this.elements.main.appendChild(this.elements.keysContainer);
+    document.body.appendChild(this.elements.workArea);
     document.body.appendChild(this.elements.main);
+    // BINDING OF KEYBOARD TO TEXTAREA
+    document.querySelectorAll(".work-area").forEach (element =>{
+      element.addEventListener("focus", () => {
+        this.open(element.value, currentValue => {
+          element.value = currentValue;
+        })
+      })
+    })
   },
 
   _createKeys() {
@@ -34,7 +47,7 @@ const Keyboard = {
         "~`", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "Backspace",
         "Tab", "q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "Del",
         "Caps Lock", "a", "s", "d", "f", "g", "h", "j", "k", "l", "Enter",
-        "Shift", "z", "x", "c", "v", "b", "n", "m", ",", ".", "?", "↑", "Shift",
+        "Shift.", "z", "x", "c", "v", "b", "n", "m", ",", ".", "↑", "Shift",
         "Ctrl", "Alt", "Space", "Alt", "Ctrl", "←", "↓", "→"
     ];
     // CREATE HTML FOR ICON
@@ -74,8 +87,8 @@ const Keyboard = {
             keyElement.innerHTML = createIconHTML("keyboard_capslock");
 
             keyElement.addEventListener ("click", () => {
-              this._toogleCapsLock();
-              keyElement.classList.toogle("keyboard__key--active", this.properties.capsLock);
+              this._toggleCapsLock();
+              keyElement.classList.toggle("keyboard__key--active", this.properties.capsLock);
             });
             break;
 
@@ -94,7 +107,7 @@ const Keyboard = {
                 keyElement.innerHTML = createIconHTML("keyboard_tab");
 
                 keyElement.addEventListener ("click", () => {
-                  this.properties.value += "	";
+                  this.properties.value += "\t";
                   this._triggerEvent("oninput");
                 });
                 break;
@@ -128,19 +141,29 @@ const Keyboard = {
   },
 
   _triggerEvent (handlerName) {
-    console.log("Event Triggered! Event name: " + handlerName);
+    if (typeof this.eventHandlers[handlerName] == "function") {
+      this.eventHandlers[handlerName](this.properties.value);
+    }
   },
 
-  _toogleCapsLock() {
-    console.log("CapsLosk toogled!");
+  _toggleCapsLock() {
+    console.log("CapsLosk toggled!");
+    this.properties.capsLock = !this.properties.capsLock;
+
+    for (const key of this.elements.keys) {
+      if (key.childElementCount === 0) {
+        key.textContent = this.properties.capsLock ? key.textContent.toUpperCase() : key.textContent.toLowerCase();
+      }
+    }
   },
 
   open(initialValue, oninput, onclose) {
-
+    this.properties.value = initialValue || "";
+    this.eventHandlers.oninput = oninput;
+    this.eventHandlers.onclose = onclose;
   },
 
   close() {
-
   }
 };
 
