@@ -63,6 +63,9 @@ const Keyboard = {
       keys.forEach((key, index) => {
         if (e.key === keyLayout[index] || key.textContent === e.key.toUpperCase()) {
         key.classList.add("active")
+        if (e.key === "CapsLock") {
+          key.toggle("keyboard__key--active")
+        }
       }
     })
     })
@@ -71,6 +74,9 @@ const Keyboard = {
       keys.forEach((key, index) => {
         if (e.key === keyLayout[index] || key.textContent === e.key.toUpperCase()) {
         key.classList.remove("active")
+        if (e.key === "CapsLock") {
+          key.classList.toggle("keyboard__key--active")
+        }
       }
     })
     })
