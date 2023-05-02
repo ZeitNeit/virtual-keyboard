@@ -6,14 +6,15 @@ module.exports = {
     "extends": [
         'standard',
         'eslint:recommended',
+        "airbnb-base",
       ],
     "overrides": [
     ],
     "parserOptions": {
         "ecmaVersion": 6
     },
-    "parser": "babel-eslint",
     ignorePatterns: ['.eslintrc.js'],
+    "parser": "babel-eslint",
     "rules": {
     }
 }

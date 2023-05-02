@@ -1,11 +1,14 @@
-const specialKeys = [
-  {keyCode:192,keyName:"`"},
-  {keyCode:9,keyName:"tab"},
-  {keyCode:20,keyName:"caps lock"},
-  {keyCode:16,keyName:"shift"},
-  {keyCode:8,keyName:"delete"},
-  {keyCode:13,keyName:"return"},
+import KEY_CODES from "./keys.js";
+
+const keyLayout = [
+  "`", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "Backspace",
+  "Tab", "q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "Delete",
+  "CapsLock", "a", "s", "d", "f", "g", "h", "j", "k", "l", "Enter",
+  "Shift.", "z", "x", "c", "v", "b", "n", "m", ",", ".", "↑", "Shift",
+  "Control", "Alt", "Space", "Alt", "Control", "←", "↓", "→"
 ];
+
+let keyElement
 
 const Keyboard = {
   elements: {
@@ -48,24 +51,50 @@ const Keyboard = {
         })
       })
     })
+    document.querySelectorAll(".keyboard__key").forEach (element => {
+      element.addEventListener("keydown", (event) => {
+        if (element.textContent === event.key) {
+        element.classList.add("active");
+        }
+      })
+    })
+    document.addEventListener("keydown", (e) => {
+      let keys = document.querySelectorAll(".keyboard__key");
+      keys.forEach((key, index) => {
+        if (e.key === keyLayout[index] || key.textContent === e.key.toUpperCase()) {
+        key.classList.add("active")
+        if (e.key === "CapsLock") {
+          key.toggle("keyboard__key--active")
+        }
+      }
+    })
+    })
+    document.addEventListener("keyup", (e) => {
+      let keys = document.querySelectorAll(".keyboard__key");
+      keys.forEach((key, index) => {
+        if (e.key === keyLayout[index] || key.textContent === e.key.toUpperCase()) {
+        key.classList.remove("active")
+        if (e.key === "CapsLock") {
+          key.classList.toggle("keyboard__key--active")
+        }
+      }
+    })
+    })
+
+
   },
 
   _createKeys() {
     const fragment = document.createDocumentFragment();
-    const keyLayout = [
-        "~`", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "Backspace",
-        "Tab", "q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "Del",
-        "Caps Lock", "a", "s", "d", "f", "g", "h", "j", "k", "l", "Enter",
-        "Shift.", "z", "x", "c", "v", "b", "n", "m", ",", ".", "↑", "Shift",
-        "Ctrl", "Alt", "Space", "Alt", "Ctrl", "←", "↓", "→"
-    ];
+
+
     // CREATE HTML FOR ICON
     const createIconHTML = (icon_name) => {
       return `<i class="material-icons">${icon_name}</i>`;
     };
 
     keyLayout.forEach (key => {
-      const keyElement = document.createElement('button');
+      keyElement = document.createElement('button');
       const insertLineBreak = ["Backspace", "Del", "Enter", "Shift"].indexOf(key) !== -1;
       keyElement.setAttribute("type", "button");
       keyElement.classList.add("keyboard__key");
@@ -81,9 +110,9 @@ const Keyboard = {
           });
           break;
 
-          case "Del":
+          case "Delete":
             keyElement.classList.add("keyboard__key");
-            keyElement.textContent = "del";
+            keyElement.textContent = "delete";
 
             keyElement.addEventListener ("click", () => {
               let ta = document.querySelector('.work-area');
@@ -103,7 +132,7 @@ const Keyboard = {
             });
             break;
 
-          case "Caps Lock":
+          case "CapsLock":
             keyElement.classList.add("keyboard__key--large", "keyboard__key--pressed");
             keyElement.innerHTML = createIconHTML("keyboard_capslock");
 
@@ -149,7 +178,14 @@ const Keyboard = {
             keyElement.addEventListener("click", () => {
                 this.properties.value += this.properties.capsLock ? key.toUpperCase() : key.toLowerCase();
                 this._triggerEvent("oninput");
-          });
+            });
+
+            // keyElement.addEventListener('keydown', (event) => {
+            //   if (key == event.key) {
+            //     this._triggerEvent("oninput");
+            //   }
+            // })
+
           break;
       }
 
@@ -186,21 +222,24 @@ const Keyboard = {
   close() {
   },
 
-  getKeyPressed(keyCode) {
-    let keyPressed;
-    for (let i = 0; i < specialKeys.length; i++) {
-      if (specialKeys[i].keyCode === keyCode) {
-        keyPressed = specialKeys[i].keyName.toUpperCase();
-        break;
-      }
-      else {
-        keyPressed = String.fromCharCode(keyCode);
-      }
-    }
-    return keyPressed;
-  }
-};
+  // getKeyPressed(keyCode) {
+  //   let keyPressed;
+  //   for (let i = 0; i < keyLayout.length; i++) {
+  //     if (keyCode === KEY_CODES[i].value[0]){
+  //       keyPressed = String.fromCharCode(keyCode);
+  //     }
+  //   return keyPressed;
+  // }
+  // }
+}
 
+// document.onkeydown = (event) => {
+//   for (let i = 0; i < keyLayout.length; i++) {
+//   if (event.key === keyLayout[i]) {
+//   keyElement.classList.add("active")
+//   }
+//   }
+// }
 
 window.addEventListener("DOMContentLoaded", function() {
   Keyboard.launch();
